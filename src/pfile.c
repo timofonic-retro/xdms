@@ -140,8 +140,8 @@ USHORT Process_File(char *iname, char *oname, USHORT cmd, USHORT opt, USHORT PCR
 		printf(" Creation date : %s",ctime(&date));
 		printf(" Lowest track in archive : %d\n",from);
 		printf(" Highest track in archive : %d\n",to);
-		printf(" Packed data size : %lu\n",pkfsize);
-		printf(" Unpacked data size : %lu\n",unpkfsize);
+		printf(" Packed data size : %u\n",pkfsize);
+		printf(" Unpacked data size : %u\n",unpkfsize);
 		printf(" Disk type of archive : ");
 
 		/*  The original DMS from SDS software (DMS up to 1.11) used other values    */
@@ -327,16 +327,18 @@ static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd
 
 	if ((cmd == CMD_UNPACK) && (number<80) && (unpklen>2048)) {
 		r = Unpack_Track(b1, b2, pklen2, unpklen, cmode, flags);
-		if (r != NO_PROBLEM) 
+		if (r != NO_PROBLEM) {
 			if (pwd)
 				return ERR_BADPASSWD;
 			else
 				return r;
-		if (usum != Calc_CheckSum(b2,(ULONG)unpklen))
+		}
+		if (usum != Calc_CheckSum(b2,(ULONG)unpklen)) {
 			if (pwd)
 				return ERR_BADPASSWD;
 			else
 				return ERR_CSUM;
+		}
 		if (fwrite(b2,1,(size_t)unpklen,fo) != unpklen) return ERR_CANTWRITE;
 		if (opt == OPT_VERBOSE) {
 			fprintf(stderr,"#");
@@ -346,16 +348,18 @@ static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd
 
 	if ((cmd == CMD_SHOWBANNER) && (number == 0xffff)){
 		r = Unpack_Track(b1, b2, pklen2, unpklen, cmode, flags);
-		if (r != NO_PROBLEM) 
+		if (r != NO_PROBLEM) {
 			if (pwd)
 				return ERR_BADPASSWD;
 			else
 				return r;
-		if (usum != Calc_CheckSum(b2,(ULONG)unpklen))
+		}
+		if (usum != Calc_CheckSum(b2,(ULONG)unpklen)) {
 			if (pwd)
 				return ERR_BADPASSWD;
 			else
 				return ERR_CSUM;
+		}
 		printbandiz(b2,unpklen);
 	}
 

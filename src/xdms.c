@@ -13,6 +13,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include <unistd.h>
+
 #include "cdata.h"
 #include "pfile.h"
 #include "crc_csum.h"
@@ -33,10 +35,11 @@ static void strcatmax(char *, char *, int);
 static void ErrMsg(USHORT, char *, char *);
 
 
-void main(int argc, char **argv){
+int main(int argc, char **argv){
 	USHORT i, cmd=0, opt=0, ret, PCRC=0, pwd=0;
 	int ext;
-	char iname[FNAME_MAXC+1], oname[FNAME_MAXC+1], cmdstr[FNAME_MAXC+20], *tname, *inm, *onm, *p, *q, *destdir=NULL;
+	char iname[FNAME_MAXC+1], oname[FNAME_MAXC+1], cmdstr[FNAME_MAXC+20], *inm, *onm, *p, *q, *destdir=NULL;
+	char tname[FNAME_MAXC];
 
 
 	if (argc < 3) {
@@ -278,7 +281,14 @@ void main(int argc, char **argv){
 		#endif
 
 		if ((cmd == CMD_UNPKGZ) || (cmd == CMD_EXTRACT)) {
-			tname = tmpnam(NULL);
+			int fd;
+			strcpy(tname, "/tmp/xdmsXXXXXX");
+			fd = mkstemp(tname);
+			if (fd < 0) {
+				fprintf(stderr, "couldn't create a temp file\n");
+				exit(-1);
+			}
+			close(fd);
 			#ifdef UNDER_DOS
 			p = tname;
 			if (p) {
@@ -381,8 +391,7 @@ void main(int argc, char **argv){
 
 	}
 
-	exit((int)ext);
-
+	return (int) ext;
 }
 
 
