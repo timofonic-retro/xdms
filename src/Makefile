@@ -10,8 +10,8 @@ CC = gcc
 OBJS= u_heavy.o xdms.o u_deep.o u_init.o u_quick.o u_medium.o u_rle.o \
       tables.o pfile.o maketbl.o getbits.o crc_csum.o
 
-CFLAGS = -O3 -Wall
-LFLAGS = -s
+CFLAGS = -O3 -Wall  -DVERSION=\"1.3.1\"
+LFLAGS =  -lm
 
 xdms: $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o xdms 
@@ -53,4 +53,5 @@ pfile.o: pfile.c cdata.h u_rle.h u_quick.h u_medium.h u_deep.h \
          u_heavy.h u_init.h crc_csum.h pfile.h
 	$(CC) $(CFLAGS) -c pfile.c -o pfile.o
 
-
+clean:	
+	rm -f *.o xdms
