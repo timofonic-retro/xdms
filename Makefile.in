@@ -1,0 +1,12 @@
+
+xdms:	
+	make -C src
+
+clean:	
+	make -C src clean
+
+install:	xdms
+	mkdir -p {PREFIX}/bin
+	mkdir -p {PREFIX}/share/doc/xdms-{VERSION}
+	install xdms/xdms {PREFIX}/bin/
+	install pmr.1 {PREFIX}/share/doc/xdms-{VERSION}/
