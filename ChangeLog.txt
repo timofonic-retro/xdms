@@ -33,5 +33,6 @@ Version 1.3.1 : 2004.09.02
     constructs. Added a simple configure script for consistent compilation
     and installation. (Heikki Orsila <heikki.orsila@iki.fi>)
 
-
-
+No Version : 2004.09.10
+    Fixed file permissions for documentation directory.
+    (Heikki Orsila <heikki.orsila@iki.fi>)
