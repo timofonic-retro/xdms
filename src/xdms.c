@@ -1,7 +1,8 @@
 
 /*
- *     xDMS  v1.3  -  Portable DMS archive unpacker  -  Public Domain
+ *     xDMS -  Portable DMS archive unpacker - Public Domain
  *     Written by     Andre Rodrigues de la Rocha  <adlroc@usa.net>
+ *
  *
  */
 
@@ -415,7 +416,7 @@ static void strcatmax(char *s1, char *s2, int max){
 
 static void Usage(void){
 	printf("\n");
-	printf(" xDMS  v1.3  -  Portable DMS archive unpacker  -  Public Domain\n");
+	printf(" xDMS  v%s  -  Portable DMS archive unpacker  -  Public Domain\n", VERSION);
 	printf(" Written by     Andre Rodrigues de la Rocha  <adlroc@usa.net> \n\n");
 	printf(" Usage: xdms [options] <command> {<dms_file[.dms]> [+output]} \n\n");
 	printf(" Commands :\n");
