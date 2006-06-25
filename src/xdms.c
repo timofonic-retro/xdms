@@ -55,31 +55,34 @@ int main(int argc, char **argv){
 			exit(EXIT_FAILURE);
 		}
 		switch (tolower(argv[i][1])) {
-			case 'q' :
-				opt = OPT_QUIET;
-				break;
-			case 'v' :
-				opt = OPT_VERBOSE;
-				break;
-			case 'd' :
-				if (++i == argc) {
-					Usage();
-					exit(EXIT_FAILURE);
-				}
-				destdir = argv[i];
-				break;
-			case 'p' :
-				if (++i == argc) {
-					Usage();
-					exit(EXIT_FAILURE);
-				}
-				PCRC = CreateCRC((UCHAR*)argv[i],(ULONG)strlen(argv[i]));
-				pwd = 1;
-				break;
-			default:
-				fprintf(stderr,"Unknown option !\n");
+		case 'f':
+			OverrideErrors = 1;
+			break;
+		case 'q' :
+			opt = OPT_QUIET;
+			break;
+		case 'v' :
+			opt = OPT_VERBOSE;
+			break;
+		case 'd' :
+			if (++i == argc) {
 				Usage();
 				exit(EXIT_FAILURE);
+			}
+			destdir = argv[i];
+			break;
+		case 'p' :
+			if (++i == argc) {
+				Usage();
+				exit(EXIT_FAILURE);
+			}
+			PCRC = CreateCRC((UCHAR*)argv[i],(ULONG)strlen(argv[i]));
+			pwd = 1;
+			break;
+		default:
+			fprintf(stderr,"Unknown option !\n");
+			Usage();
+			exit(EXIT_FAILURE);
 		}
 	}
 
@@ -438,6 +441,7 @@ static void Usage(void){
 	printf("     d : Show attached FILEID.DIZ\n");
 	printf("     b : Show attached Banner\n\n");
 	printf(" Options :\n");
+	printf("    -f : Override errors (for desperate data salvaging)\n");
 	printf("    -q : Quiet\n");
 	printf("    -v : Verbose\n");
 	printf("    -d <destdir>  : Set destination directory\n");
