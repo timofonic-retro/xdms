@@ -18,6 +18,7 @@
 #include "cdata.h"
 #include "pfile.h"
 #include "crc_csum.h"
+#include "xdmsconfig.h"
 
 #ifdef UNDER_DOS
 #include <io.h>
@@ -284,6 +285,10 @@ int main(int argc, char **argv){
 		#endif
 
 		if ((cmd == CMD_UNPKGZ) || (cmd == CMD_EXTRACT)) {
+#ifdef NO_MKSTEMP
+			/* You deserve bugs and problems for this one! */
+			strcpy(tname, tempnam(NULL, NULL));
+#else
 			int fd;
 			strcpy(tname, "/tmp/xdmsXXXXXX");
 			fd = mkstemp(tname);
@@ -292,6 +297,7 @@ int main(int argc, char **argv){
 				exit(-1);
 			}
 			close(fd);
+#endif
 			#ifdef UNDER_DOS
 			p = tname;
 			if (p) {

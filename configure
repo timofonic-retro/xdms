@@ -61,3 +61,11 @@ echo "Configure succesful."
 sed -e "s|{CC}|$CC|" -e "s|{ARCHFLAGS}|$ARCHFLAGS|" \
     -e "s|{ARCHLIBS}|$ARCHLIBS|" -e "s|{VERSION}|$VERSION|" \
     < src/Makefile.in > src/Makefile
+
+cat > src/xdmsconfig.h <<EOF
+#ifndef XDMS_CONFIG_H_
+#define XDMS_CONFIG_H_
+/* Uncomment on operating systems without mkstemp */
+/* #define NO_MKSTEMP */
+#endif
+EOF

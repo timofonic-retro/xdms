@@ -53,16 +53,32 @@ your  path.   If  you  use  another  system,  you will need to compile xDMS
 yourself.   xDMS  was written in ANSI C and should work with most ANSI C or
 C++  compilers and platforms with minor or no changes.  It was tested under
 Linux  with  GCC,  MS-DOS  with DJGPP and Amiga with SAS/C and worked well,
-without  warnings.   To  compile it with GCC or DJGPP you can just use make
-with  the supplied Makefile.  For other compilers you may have to modify it
-slightly.   A  smakefile  for  SAS/C  is also supplied.  After a successful
-compilation  you  can  install  the  generated executable somewhere in your
-path.  You also need to install gzip and readdisk if you want to be able to
-create  gzip  compressed  disk  images and extract files from DMS.  gzip is
-available  in  most public domain software libraries.  Readdisk is supplied
-with UAE.  You probably already have both.
+without  warnings.   To  compile it with GCC or DJGPP, do:
 
+ $ ./configure
+ $ make
 
+And if both were successful, do
+
+ $ make install
+
+as the admin user. By default xdms will be installed to /usr/local/bin/.
+That's it.
+
+If your operating doesn't have mkstemp():
+
+ Run ./configure and then edit src/xdmsconfig.h. Uncomment the line
+   /* #define NO_MKSTEMP */
+ to be
+   #define NO_MKSTEMP
+
+For other compilers you may have to modify it slightly.  A smakefile
+for SAS/C is also supplied.  After a successful compilation you can
+install the generated executable somewhere in your path.  You also
+need to install gzip and readdisk if you want to be able to create
+gzip compressed disk images and extract files from DMS.  gzip is
+available in most public domain software libraries.  Readdisk is
+supplied with UAE.  You probably already have both.
 
 Usage:
 ------
