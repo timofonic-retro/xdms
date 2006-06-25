@@ -1,7 +1,5 @@
-
-
-    xDMS  version 1.3    Released in 24-Mar-99
-
+xDMS - extracting DMS disk image files
+--------------------------------------
 
 Introduction:
 -------------
@@ -45,7 +43,7 @@ stdin and stdout for input and output of data.
 
 
 
-Instalation:
+Installation:
 ------------
 
   This  archive  contains  xDMS  in  binary  executable format for AmigaOS,
@@ -130,6 +128,7 @@ case sensitive.
 
 You can also supply one or more (or none) of the following options:
 
+    -f : Override errors (to salvage broken data tracks)
     -q : Quiet
     -v : Verbose
     -d <destdir>  : Set destination directory
@@ -286,20 +285,11 @@ How to contact the author:
   If you have some problem, or have found a bug in xDMS, you can contact me
 by e-mail.  But first make sure you have read all this documentation.
 
+	 The new maintainer:
+	     Heikki Orsila
+	     heikki.orsila@iki.fi
 
-
-
-                                    Andre' Rodrigues de la Rocha
-
-                                    E-Mail address : adlroc@usa.net
-
-
-  Also, from version 1.3.1 and up, you may contact Heikki Orsila by e-mail.
-
-	 Heikki Orsila
-	 heikki.orsila@iki.fi
-
-
----------------------------------------------------------------------------
-
+	 The old maintainer:
+	     Andre' Rodrigues de la Rocha
+	     adlroc@usa.net
 

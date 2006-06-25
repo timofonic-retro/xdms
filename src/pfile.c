@@ -42,6 +42,7 @@ static USHORT PWDCRC;
 
 UCHAR *text;
 
+int OverrideErrors;
 
 
 USHORT Process_File(char *iname, char *oname, USHORT cmd, USHORT opt, USHORT PCRC, USHORT pwd){
@@ -269,7 +270,9 @@ USHORT Process_File(char *iname, char *oname, USHORT cmd, USHORT opt, USHORT PCR
 
 
 
-static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd, USHORT opt, USHORT pwd){
+static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2,
+			    USHORT cmd, USHORT opt, USHORT pwd)
+{
 	USHORT hcrc, dcrc, usum, number, pklen1, pklen2, unpklen, l, r;
 	UCHAR cmode, flags;
 
@@ -289,7 +292,8 @@ static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd
 	/*  Track Header CRC  */
 	hcrc = (USHORT)((b1[THLEN-2] << 8) | b1[THLEN-1]);
 
-	if (CreateCRC(b1,(ULONG)(THLEN-2)) != hcrc) return ERR_THCRC;
+	if (CreateCRC(b1,(ULONG)(THLEN-2)) != hcrc)
+		return ERR_THCRC;
 
 	number = (USHORT)((b1[2] << 8) | b1[3]);	/*  Number of track  */
 	pklen1 = (USHORT)((b1[6] << 8) | b1[7]);	/*  Length of packed track data as in archive  */
@@ -317,29 +321,55 @@ static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd
 
 	if (fread(b1,1,(size_t)pklen1,fi) != pklen1) return ERR_SREAD;
 
-	if (CreateCRC(b1,(ULONG)pklen1) != dcrc) return ERR_TDCRC;
+	if (CreateCRC(b1,(ULONG)pklen1) != dcrc) {
+		if (OverrideErrors) {
+			fprintf(stderr, "Detected a CRC error on "
+				"track %d, but overriding.\n", number);
+		} else {
+			return ERR_TDCRC;
+		}
+	}
 
 	/*  track 80 is FILEID.DIZ, track 0xffff (-1) is Banner  */
 	/*  and track 0 with 1024 bytes only is a fake boot block with more advertising */
 	/*  FILE_ID.DIZ is never encrypted  */
 
-	if (pwd && (number!=80)) dms_decrypt(b1,pklen1);
+	if (pwd && (number != 80))
+		dms_decrypt(b1,pklen1);
 
 	if ((cmd == CMD_UNPACK) && (number<80) && (unpklen>2048)) {
+
+		memset(b2, 0, unpklen);
+
 		r = Unpack_Track(b1, b2, pklen2, unpklen, cmode, flags);
 		if (r != NO_PROBLEM) {
-			if (pwd)
-				return ERR_BADPASSWD;
-			else
-				return r;
+			if (OverrideErrors) {
+				fprintf(stderr, "Detected an error while "
+					"unpacking track %d, but "
+					"overriding.\n", number);
+			} else {
+				if (pwd)
+					return ERR_BADPASSWD;
+				else
+					return r;
+			}
 		}
 		if (usum != Calc_CheckSum(b2,(ULONG)unpklen)) {
-			if (pwd)
-				return ERR_BADPASSWD;
-			else
-				return ERR_CSUM;
+			if (OverrideErrors) {
+				fprintf(stderr, "Detected an error after "
+					"unpacking track %d, but "
+					"overriding.\n", number);
+			} else {
+				if (pwd)
+					return ERR_BADPASSWD;
+				else
+					return ERR_CSUM;
+			}
 		}
-		if (fwrite(b2,1,(size_t)unpklen,fo) != unpklen) return ERR_CANTWRITE;
+
+		if (fwrite(b2, 1, (size_t) unpklen, fo) != unpklen)
+			return ERR_CANTWRITE;
+
 		if (opt == OPT_VERBOSE) {
 			fprintf(stderr,"#");
 			fflush(stderr);
@@ -349,24 +379,48 @@ static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd
 	if ((cmd == CMD_SHOWBANNER) && (number == 0xffff)){
 		r = Unpack_Track(b1, b2, pklen2, unpklen, cmode, flags);
 		if (r != NO_PROBLEM) {
-			if (pwd)
-				return ERR_BADPASSWD;
-			else
-				return r;
+			if (OverrideErrors) {
+				fprintf(stderr, "Detected an error while "
+					"unpacking bannder, but overriding.\n");
+			} else {
+				if (pwd)
+					return ERR_BADPASSWD;
+				else
+					return r;
+			}
 		}
 		if (usum != Calc_CheckSum(b2,(ULONG)unpklen)) {
-			if (pwd)
-				return ERR_BADPASSWD;
-			else
-				return ERR_CSUM;
+			if (OverrideErrors) {
+				fprintf(stderr, "Detected an error after "
+					"unpacking banner, but overriding.\n");
+			} else {
+				if (pwd)
+					return ERR_BADPASSWD;
+				else
+					return ERR_CSUM;
+			}
 		}
 		printbandiz(b2,unpklen);
 	}
 
 	if ((cmd == CMD_SHOWDIZ) && (number == 80)) {
 		r = Unpack_Track(b1, b2, pklen2, unpklen, cmode, flags);
-		if (r != NO_PROBLEM) return r;
-		if (usum != Calc_CheckSum(b2,(ULONG)unpklen)) return ERR_CSUM;
+		if (r != NO_PROBLEM) {
+			if (OverrideErrors) {
+				fprintf(stderr, "Detected an error while "
+					"unpacking showdiz, but overriding.\n");
+			} else {
+				return r;
+			}
+		}
+		if (usum != Calc_CheckSum(b2,(ULONG)unpklen)) {
+			if (OverrideErrors) {
+				fprintf(stderr, "Detected an error after "
+					"unpacking showdiz, but overriding.\n");
+			} else {
+				return ERR_CSUM;
+			}
+		}
 		printbandiz(b2,unpklen);
 	}
 
@@ -376,7 +430,9 @@ static USHORT Process_Track(FILE *fi, FILE *fo, UCHAR *b1, UCHAR *b2, USHORT cmd
 
 
 
-static USHORT Unpack_Track(UCHAR *b1, UCHAR *b2, USHORT pklen2, USHORT unpklen, UCHAR cmode, UCHAR flags){
+static USHORT Unpack_Track(UCHAR *b1, UCHAR *b2, USHORT pklen2, USHORT unpklen,
+			   UCHAR cmode, UCHAR flags)
+{
 	switch (cmode){
 		case 0:
 			/*   No Compression   */
@@ -427,7 +483,6 @@ static USHORT Unpack_Track(UCHAR *b1, UCHAR *b2, USHORT pklen2, USHORT unpklen, 
 	if (!(flags & 1)) Init_Decrunchers();
 
 	return NO_PROBLEM;
-
 }
 
 

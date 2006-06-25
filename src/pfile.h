@@ -39,5 +39,8 @@
 #define OPT_QUIET 2
 
 
+extern int OverrideErrors;
+
+
 USHORT Process_File(char *, char *, USHORT, USHORT, USHORT, USHORT);
 

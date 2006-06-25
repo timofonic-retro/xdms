@@ -426,10 +426,12 @@ static void strcatmax(char *s1, char *s2, int max){
 
 
 
-static void Usage(void){
+static void Usage(void)
+{
 	printf("\n");
 	printf(" xDMS  v%s  -  Portable DMS archive unpacker  -  Public Domain\n", VERSION);
-	printf(" Written by     Andre Rodrigues de la Rocha  <adlroc@usa.net> \n\n");
+	printf(" Written by     Andre Rodrigues de la Rocha  <adlroc@usa.net>\n");
+	printf(" Maintained by  Heikki Orsila <heikki.orsila@iki.fi>\n\n");
 	printf(" Usage: xdms [options] <command> {<dms_file[.dms]> [+output]} \n\n");
 	printf(" Commands :\n");
 	printf("     t : Test DMS archives\n");
