@@ -55,7 +55,7 @@ EOF
 mingw=$(uname |grep -i mingw32)
 if test -n "$mingw" ; then
     echo "#define NO_MKSTEMP" >> src/xdmsconfig.h
-    ARCHLIBS+="-liberty "
+    ARCHLIBS="$ARCHLIBS -liberty"
 fi
 echo "#endif" >> src/xdmsconfig.h
 
