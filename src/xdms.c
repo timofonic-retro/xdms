@@ -279,26 +279,25 @@ int main(int argc, char **argv){
 
 		}
 
-		#ifdef UNDER_DOS
+#ifdef UNDER_DOS
 		if (!inm) setmode(fileno(stdin),O_BINARY);
 		if ((cmd == CMD_UNPACK) && (!onm)) setmode(fileno(stdout),O_BINARY);
-		#endif
+#endif
 
 		if ((cmd == CMD_UNPKGZ) || (cmd == CMD_EXTRACT)) {
-#ifdef NO_MKSTEMP
-			/* You deserve bugs and problems for this one! */
-			strcpy(tname, tempnam(NULL, NULL));
-#else
 			int fd;
 			strcpy(tname, "/tmp/xdmsXXXXXX");
+#ifdef NO_MKSTEMP
+			fd = mkstemps(tname, 0);
+#else
 			fd = mkstemp(tname);
+#endif
 			if (fd < 0) {
 				fprintf(stderr, "couldn't create a temp file\n");
 				exit(-1);
 			}
 			close(fd);
-#endif
-			#ifdef UNDER_DOS
+#ifdef UNDER_DOS
 			p = tname;
 			if (p) {
 				while (*p) {
@@ -306,7 +305,7 @@ int main(int argc, char **argv){
 					p++;
 				}
 			}
-			#endif
+#endif
 			ret = Process_File(inm, tname, CMD_UNPACK, opt, PCRC, pwd);
 			if (opt != OPT_QUIET) ErrMsg(ret, inm, "Temporary file");
 			if (ret == NO_PROBLEM) {
@@ -315,18 +314,18 @@ int main(int argc, char **argv){
 						fprintf(stderr,"Repacking unpacked data with gzip\n");
 					}
 					if (onm)
-						#ifdef UNDER_DOS
+#ifdef UNDER_DOS
 						/*  DOS sucks  */
 						sprintf(cmdstr,"gzip -cfqn %s >%s",tname,onm);
-						#else
+#else
 						sprintf(cmdstr,"gzip -cfqn \"%s\" >\"%s\"",tname,onm);
-						#endif
+#endif
 					else
-						#ifdef UNDER_DOS
+#ifdef UNDER_DOS
 						sprintf(cmdstr,"gzip -cfqn %s",tname);
-						#else
+#else
 						sprintf(cmdstr,"gzip -cfqn \"%s\"",tname);
-						#endif
+#endif
 					if (system(cmdstr)) ret = ERR_GZIP;
 					if (opt != OPT_QUIET) ErrMsg(ret, inm, onm);
 				} else {
@@ -334,17 +333,17 @@ int main(int argc, char **argv){
 						fprintf(stderr,"Extracting files from unpacked data with readdisk\n");
 					}
 					if ((onm) && (strlen(onm)>0))
-						#ifdef UNDER_DOS
+#ifdef UNDER_DOS
 						sprintf(cmdstr,"readdisk %s %s",tname,onm);
-						#else
+#else
 						sprintf(cmdstr,"readdisk \"%s\" \"%s\"",tname,onm);
-						#endif
+#endif
 					else
-						#ifdef UNDER_DOS
+#ifdef UNDER_DOS
 						sprintf(cmdstr,"readdisk %s",tname);
-						#else
+#else
 						sprintf(cmdstr,"readdisk \"%s\"",tname);
-						#endif
+#endif
 					if (system(cmdstr)) ret = ERR_READDISK;
 					if (opt != OPT_QUIET) ErrMsg(ret, inm, onm);
 				}

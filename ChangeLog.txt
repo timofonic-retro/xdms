@@ -48,3 +48,6 @@ No version : 2006-06-25
     edit src/xdmsconfig.h and then you can issue 'make'.
     (Heikki Orsila <heikki.orsila@iki.fi>)
 
+No version : 2006-08-16
+    Automatic detection for MINGW to avoid mkstemp(). Use mkstemps() instead.
+    (Heikki Orsila <heikki.orsila@iki.fi>)
