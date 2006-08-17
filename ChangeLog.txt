@@ -63,3 +63,7 @@ No version : 2006-08-17
     Fixed MinGW platform detection and src/Makefile.in. Link flags in
     the compile rule must be after object files. Thanks to Genju and Poohbear.
     (Heikki Orsila <heikki.orsila@iki.fi>)
+
+    "xdms foo.dms" is now short-hand for "xdms u foo.dms". The "u" command
+    is an unnecessary paramter for most use cases so it is not needed
+    anymore. Updated the man page accordingly.

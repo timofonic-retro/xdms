@@ -43,14 +43,14 @@ int main(int argc, char **argv){
 	char tname[FNAME_MAXC];
 
 
-	if (argc < 3) {
+	if (argc < 2) {
 		Usage();
 		exit(EXIT_FAILURE);
 	}
 
 	/*  proccess options in the command line  */
-	for (i=1; (i<argc) && (argv[i][0] == '-'); i++){
-		if (strlen(argv[i])>2) {
+	for (i=1; (i < argc) && (argv[i][0] == '-'); i++) {
+		if (strlen(argv[i]) > 2) {
 			fprintf(stderr,"Unknown option !\n");
 			Usage();
 			exit(EXIT_FAILURE);
@@ -87,13 +87,13 @@ int main(int argc, char **argv){
 		}
 	}
 
-	if ((i == argc) || (strlen(argv[i])>1)) {
+	if (i == argc) {
 		Usage();
 		exit(EXIT_FAILURE);
 	}
 
-
-	switch (tolower(argv[i][0])) {
+	if (strlen(argv[i]) == 1) {
+		switch (tolower(argv[i][0])) {
 		case 'u':
 			cmd = CMD_UNPACK;
 			break;
@@ -122,11 +122,14 @@ int main(int argc, char **argv){
 			fprintf(stderr,"Unknown command !\n");
 			Usage();
 			exit(EXIT_FAILURE);
-	}
+		}
 
-	if (++i == argc) {
-		Usage();
-		exit(EXIT_FAILURE);
+		if (++i == argc) {
+			Usage();
+			exit(EXIT_FAILURE);
+		}
+	} else {
+		cmd = CMD_UNPACK; /* unpack by default */
 	}
 
 	ext = EXIT_SUCCESS;
@@ -136,8 +139,10 @@ int main(int argc, char **argv){
 		if (!strcmpnc("stdin",argv[i])) {
 			inm = NULL;
 		} else {
-			strcpymax(iname,argv[i],FNAME_MAXC);
-			if ((strlen(iname)<4) || (strcmpnc(".dms",iname+strlen(iname)-4))) strcatmax(iname,".dms",FNAME_MAXC);
+			strcpymax(iname, argv[i], FNAME_MAXC);
+			if ((strlen(iname) < 4) ||
+			    (strcmpnc(".dms", iname + strlen(iname) - 4)))
+				strcatmax(iname, ".dms", FNAME_MAXC);
 			inm = iname;
 		}
 		i++;
