@@ -51,3 +51,8 @@ No version : 2006-06-25
 No version : 2006-08-16
     Automatic detection for MINGW to avoid mkstemp(). Use mkstemps() instead.
     (Heikki Orsila <heikki.orsila@iki.fi>)
+
+No version : 2006-08-17
+    Fixed MinGW platform detection and src/Makefile.in. Link flags in
+    the compile rule must be after object files. Thanks to Genju and Poohbear.
+    (Heikki Orsila <heikki.orsila@iki.fi>)
