@@ -1,7 +1,4 @@
-
-
 #  xDMS  Makefile
-
 
 # If you use another compiler change the following line:
 CC = {CC}
@@ -9,8 +6,8 @@ CC = {CC}
 OBJS= u_heavy.o xdms.o u_deep.o u_init.o u_quick.o u_medium.o u_rle.o \
       tables.o pfile.o maketbl.o getbits.o crc_csum.o
 
-CFLAGS = -O2 -Wall {ARCHFLAGS} -DVERSION=\"{VERSION}\"
-LFLAGS = {ARCHLIBS}
+CFLAGS = -Wall {CFLAGS}
+LFLAGS = {LDFLAGS}
 
 .SUFFIXES: .c .o
 

@@ -53,6 +53,13 @@ No version : 2006-08-16
     (Heikki Orsila <heikki.orsila@iki.fi>)
 
 No version : 2006-08-17
+    Cleaned up configure script and makefiles. -O2 compiler flag can now
+    be replaced with $CFLAGS environment variable. Earlier $CFLAGS were
+    just appended after -O2. $LDFLAGS and $CC are the other recognizable
+    environment variables for configure. The makefiles do not recognize
+    environment variables. All compile options must be given for the
+    configure script.
+
     Fixed MinGW platform detection and src/Makefile.in. Link flags in
     the compile rule must be after object files. Thanks to Genju and Poohbear.
     (Heikki Orsila <heikki.orsila@iki.fi>)
