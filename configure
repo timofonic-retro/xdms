@@ -46,13 +46,22 @@ for opt in "$@" ; do
 	esac
 done
 
+mingw=$(uname |grep -i mingw32)
+if test -z "$mingw" ; then
+    mingw=$($CC --version |grep -i mingw)
+    if test -n "$mingw" ; then
+	mingw="yes"
+    else
+	mingw=""
+    fi
+else
+    mingw="yes"
+fi
 
 cat > src/xdmsconfig.h <<EOF
 #ifndef XDMS_CONFIG_H_
 #define XDMS_CONFIG_H_
 EOF
-
-mingw=$(uname |grep -i mingw32)
 if test -n "$mingw" ; then
     echo "#define NO_MKSTEMP" >> src/xdmsconfig.h
     ARCHLIBS="$ARCHLIBS -liberty"

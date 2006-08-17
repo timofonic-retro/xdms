@@ -18,7 +18,7 @@ LFLAGS = {ARCHLIBS}
 	$(CC) $(CFLAGS) -c $<
 
 xdms:	$(OBJS)
-	$(CC) $(LFLAGS) $(OBJS) -o $@
+	$(CC) $(OBJS) $(LFLAGS) -o $@
 
 getbits.o: getbits.c cdata.h getbits.h
 tables.o: tables.c cdata.h
