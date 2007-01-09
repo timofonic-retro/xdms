@@ -31,7 +31,8 @@ Version 1.3.1 : 2004.09.02
     Moved to C99 type definitions (#include <stdint.h>). Replaced tmpnam()
     with mkstemp(). Fixed print formatters. Fixed ambiguous C language
     constructs. Added a simple configure script for consistent compilation
-    and installation. (Heikki Orsila <heikki.orsila@iki.fi>)
+    and installation.
+    (Heikki Orsila <heikki.orsila@iki.fi>)
 
 No Version : 2004-09-10
     Fixed file permissions for documentation directory.
@@ -40,7 +41,8 @@ No Version : 2004-09-10
 Version 1.3.2 : 2006-06-25
     Added -f option to override errors in unpacked data. It can be useful for
     desperate data salvation. Please send me corrupted dms images for
-    further analysis to improve xdms. (Heikki Orsila <heikki.orsila@iki.fi>)
+    further analysis to improve xdms.
+    (Heikki Orsila <heikki.orsila@iki.fi>)
 
 No version : 2006-06-25
     Added a broken support for operating systems without mkstemp() (bad, bad!).
@@ -62,8 +64,12 @@ No version : 2006-08-17
 
     Fixed MinGW platform detection and src/Makefile.in. Link flags in
     the compile rule must be after object files. Thanks to Genju and Poohbear.
-    (Heikki Orsila <heikki.orsila@iki.fi>)
 
     "xdms foo.dms" is now short-hand for "xdms u foo.dms". The "u" command
     is an unnecessary paramter for most use cases so it is not needed
     anymore. Updated the man page accordingly.
+    (Heikki Orsila <heikki.orsila@iki.fi>)
+
+No version : 2007-01-10
+    Fixed C datatypes for building xdms on DJGPP. Thanks to Andreas.
+    (Heikki Orsila <heikki.orsila@iki.fi>)

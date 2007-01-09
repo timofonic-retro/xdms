@@ -1,4 +1,3 @@
-
 /*
  *     xDMS  v1.3  -  Portable DMS archive unpacker  -  Public Domain
  *     Written by     Andre Rodrigues de la Rocha  <adlroc@usa.net>
@@ -6,25 +5,42 @@
  *     Main types of variables used in xDMS, some implementation
  *     dependant features and other global stuff
  */
-
+#ifndef __MSDOS
 #include <stdint.h>
+#endif
 
 #ifndef UCHAR
-#define UCHAR uint8_t
+  #ifdef __MSDOS
+  #define UCHAR unsigned char
+ #else
+  #define UCHAR uint8_t
+ #endif
 #endif
 
 #ifndef USHORT
-#define USHORT uint16_t
+ #ifdef __MSDOS
+  #define USHORT unsigned int
+ #else
+  #define USHORT uint16_t
+ #endif
 #endif
 
+
 #ifndef SHORT
-#define SHORT int16_t
+ #ifdef __MSDOS
+  #define SHORT short
+ #else
+  #define SHORT int16_t
+ #endif
 #endif
 
 #ifndef ULONG
-#define ULONG uint32_t
+  #ifdef __MSDOS
+  #define ULONG unsigned long
+ #else
+  #define ULONG uint32_t
+ #endif
 #endif
-
 
 
 #ifndef INLINE
@@ -77,5 +93,3 @@
 
 
 extern UCHAR *text;
-
-
