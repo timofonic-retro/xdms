@@ -299,7 +299,7 @@ int main(int argc, char **argv){
 #endif
 			if (fd < 0) {
 				fprintf(stderr, "couldn't create a temp file\n");
-				exit(-1);
+				exit(1);
 			}
 			close(fd);
 #ifdef UNDER_DOS
