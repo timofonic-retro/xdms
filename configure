@@ -24,14 +24,17 @@ for opt in "$@" ; do
 		echo "configure parameter error"
 		echo ""
 		echo "Options:"
-		echo " --prefix dir           install pipemeter to prefix 'dir'"
- 		echo " --package-prefix dest  pretend to install to the prefix,"
+		echo " --prefix=dir           install program to prefix 'dir'"
+ 		echo " --package-prefix=dest  pretend to install to the prefix,"
 		echo "                       but copy files to 'dest/prefix' on make install"
 		echo ""
 		echo "Influential environment variables:"
 		echo "  CC                    C compiler command"
 		echo "  CFLAGS                C compiler flags"
 		echo "  LDFLAGS               Linker flags"
+		echo "Setting environment variables CFLAGS and LDFLAGS lets you add"
+		echo "compile time options for your architecture. CC variable choose the"
+		echo "compiler."
 		exit
 		;;
 	esac
